@@ -1,0 +1,256 @@
+% ---------------------------- Problem 1----------------------------------
+\subsubsection*{\center Задача № 1.}
+{\bf Условие.~}
+Разложить в ряд Фурье заданную функцию $f(x)$, построить графики $f(x)$ и суммы ее ряда Фурье. Если не указывается, какой вид разложения в ряд необходимо представить, то требуетчя разложить функцию либо в общий тригонометрический ряд Фурье, либо следует выбрать оптимальный вид разложения в зависимости от данной функции.
+
+\[
+f(x)=
+	\left\{
+	\begin{array}{cc}
+	x,	&	0 <x\leq2, \\ 
+	0, 	& 	-2 < x \leq 0,
+	\end{array}
+	\right. на отрезке [-2;\,2].	\\[1cm]
+\]
+{\bf Решение.~}	
+%График
+\begin{center}
+	\begin{minipage}[t][7cm][c]{7cm}
+		\begin{tikzpicture}[
+		declare function={
+			func(\x)=
+			and(\x > -2, \x <= 0) * 0.0+ 
+			(\x >  0, \x <= 2) * {\x};
+		}
+		]
+		\begin{axis}[
+		axis x line=middle, axis y line=middle,
+		axis equal,	
+		ymin=-1.1, ymax=2.1, ytick={-1,...,2}, ylabel=$y$,
+		xmin=-3, xmax=3, xtick={-3,...,3},
+		xlabel=$x$,
+		domain=0.0:4.0,samples=600 % added		
+		]
+		
+		\addplot [domain=-2:0,black,line width=2pt] {0.0};
+		\addplot [domain=0:2,black,line width=2pt] {\x};
+		\end{axis}
+		\end{tikzpicture}
+	\end{minipage}
+\end{center}
+\noindent
+Построим общий тригонометрический ряд Фурье вида
+$$
+f(x)=\frac{a_0}{2}+\sum_{n=1}^\infty 
+	\left(a_n\cos{(n\omega x)}+b_n\sin{(n\omega x)}\right),\quad\text{где}\,\omega=\frac{2\pi}{T},\,T=4.
+$$
+\noindent
+Вычислим коэффициенты
+$$
+\begin{array}{rcl}
+a_0 &=& \displaystyle\frac{1}{2}\left.\left(
+\int\limits_{-2}^{0}
+0\,dx + \int\limits_{0}^{2}
+x\,dx \right) = 
+\frac{1}{2}\left(\frac{x^2}{2}\right)
+\right|_0^{2} = 1,												\\[12pt]
+a_n &=& \displaystyle\frac{1}{2}\left(
+\int\limits_{-2}^{0}
+0\cos{(\frac{n\pi x}{2})}\,dx + \int\limits_{0}^{2}
+x\cos{(\frac{n\pi x}{2})}\,dx \right) =
+\displaystyle\frac{1}{2}\left.\left(\frac{2x}{\pi n}\sin{(\frac{n\pi x}{2})} + \frac{4}{\pi^2 n^2}\cos{(\frac{n\pi x}{2})}\right)\right|_0^{2} = 	\\[12pt]
+	&=& \displaystyle\frac{2}{n^2\pi^2} ( (-1)^n-1 ),	\\[12pt]
+b_n &=&  \displaystyle\frac{1}{2}\left(
+\int\limits_{-2}^{0}
+0\sin{(\frac{n\pi x}{2})}\,dx + \int\limits_{0}^{2}
+x\sin{(\frac{n\pi x}{2})}\,dx \right) =
+\displaystyle\frac{1}{2}\left.\left(-\frac{2x}{\pi n}\cos{(\frac{n\pi x}{2})} + \frac{4}{\pi^2 n^2}\sin{(\frac{n\pi x}{2})}\right)\right|_0^{2} = 	\\[12pt]
+	&=& \displaystyle\frac{2}{n\pi}(-1)^{n+1},	\\[12pt]
+\end{array}
+$$
+Применив теорему Дирихле о поточечной сходимости ряда Фурье, видим, что построенный ряд Фурье сходится 
+к периодическому (с периодом $T=4$) продолжению исходной функции, и $S(2n)= 1 $ при $n=\pm1,\pm3,\pm5 \ldots$. 
+График функции $S(x)$ имеет следующий вид, где $S(x)$ --- сумма ряда Фурье.
+\begin{center}
+	\begin{tikzpicture}
+	\begin{axis}[xmin=-6, xmax=6, ymin=-1, ymax=0.5,
+	width=0.8\textwidth,
+	height=0.4\textwidth,
+	axis x line=middle,
+	axis y line=middle, 
+	every axis x label/.style={at={(current axis.right of origin)},anchor=west},
+	every inner x axis line/.append style={|-latex'},
+	every inner y axis line/.append style={|-latex'},
+	minor tick num=1,			
+	axis equal=true,
+	xlabel=$x$, 
+	ylabel=$S(x)$,          
+	samples=100,
+	clip=true,
+	]
+	\addplot[color=black, line width=1.5pt,domain=-6:-4] {0.0};
+	\addplot[color=black, line width=1.5pt,domain=-4:-2]{x+4};
+	\addplot[color=black, line width=1.5pt,domain=-2:0] {0.0};
+	\addplot[color=black, line width=1.5pt,domain=0:2]{x};
+	\addplot[color=black, line width=1.5pt,domain=2:4] {0.0};
+	\addplot[color=black, line width=1.5pt,domain=4:6]{x-4};
+	\addplot[
+	mark=*,
+	mark options={fill=black, draw=black},
+	only marks,
+	] coordinates {(-6, 1.0) (-2, 1.0) (2, 1.0) (6, 1.0)};
+	\end{axis}
+	\end{tikzpicture}
+\end{center}
+
+\noindent
+\textbf{Ответ:}
+\[
+\begin{split}
+&f(x)=\frac{1}{2}+\sum_{n=1}^\infty\left[ \frac{2}{n^2\pi^2}((-1)^n-1)\cos{(\frac{n\pi x}{2})}+\frac{2}{n\pi}(-1)^{n+1}\sin{(\frac{n\pi x}{2})}\right]; \\
+&S(2n)= 1, n=\pm1,\pm3,\pm5 \ldots.
+\end{split}
+\]
+
+
+
+
+
+
+% ---------------------------- Problem 2----------------------------------
+\subsubsection*{\center Задача № 2.}
+{\bf Условие.~}
+Для заданной графически функции $y(x)$ построить ряд Фурье в комплексной форме, изобразить график суммы построенного ряда
+
+%График
+\begin{center}
+		\begin{tikzpicture}[
+		declare function={
+			func(\x)=
+			and(\x >= 0, \x <= 1) * (exp(\x)-1) + 
+			and(\x >  1, \x <= 3) * 1.71828;
+		}
+		]
+		\begin{axis}[
+		axis x line=middle, axis y line=middle,
+		axis equal,	
+		ymin=-1.1, ymax=2.1, ytick={-1,...,2}, ylabel=$y$,
+		xmin=-1.1, xmax=5, xtick={-1,...,4}, xlabel=$x$,
+		domain=0.0:2.95,samples=600 % added		
+		]
+		
+		\addplot [domain=0:1,blue,line width=2pt] {(exp(\x)-1)};
+		\addplot [domain=1:3,blue,line width=2pt] {1.71828};
+		\addplot [dashed, black] coordinates {(1,0)(1,1.71828)};					
+		\addplot [dashed, black] coordinates {(3,0)(3,1.71828)};		
+		% absolute in pgfplots coordinates
+		\node[] at (axis cs: 1.05,0.65) {\small$e^x-1$};		
+		\end{axis}
+		\end{tikzpicture}					
+	\end{center} \\
+\noindent
+\textbf{Решение.}\\
+
+\noindent
+Ряд Фурье в комплексной форме имеет следующий вид
+\[
+f(x) = \sum_{n=-\infty}^\infty c_n e^{i\omega nx},\quad c_n=\frac{1}{T}\int\limits_a^b f(x) e^{-i\omega nx}dx,\,\omega=\frac{2\pi}{T}.
+\]
+В нашем примере $ a=0,b=3,T=3,\omega=2\pi/3$, 
+найдем коэффицинеты $c_n,\,n=0,\pm1,\pm2,\ldots$
+где $\omega=2\pi/T,\,T=3.$
+$$
+\begin{array}{rcl}
+c_0 &=&\displaystyle\frac{1}{3} \int\limits_0^3 f(x)dx=\frac{a_0}{2}=e-\frac{4}{3} \approx 1.38,\\[12pt]
+c_n &=&\displaystyle\frac{1}{3}\left(
+\int\limits_0^1
+(e^x-1)e^{-i\omega nx}dx+ (e-1)\int\limits_1^3
+e^{-i\omega nx}dx \right) ={}\\[12pt]
+&=&\displaystyle\frac{1}{3}\left(
+\left.\frac{1}{-i\omega n + 1} e^{(1-i\omega n)x} \right|_0^1
+-\left.\frac{1}{-i\omega n} e^{-i\omega nx} \right|_0^1
++\left.\frac{e-1}{-i\omega n}e^{-i\omega nx}\right|_1^3\right) = \\[12pt]
+&=&\displaystyle\frac{3+i2\pi n}{9+4\pi^2 n^2}\left(e^{1-\frac{i2\pi n}{3}}-1 \right)-\frac{i}{2\pi n}\left(e^{\frac{-i2\pi n}{3}}-1 \right)+(e-1)\frac{i}{2 \pi n}\left(e^{-i2\pi n}-e^{\frac{-i2\pi n}{3}} \right)= \\[12pt]
+&=&
+\displaystyle\frac{1}{2}\left(\frac{3}{9+\pi^2n^2}\left[e\left(\cos(\frac{\pi n}{3}) +\frac{\pi n}{3}\sin(\frac{\pi n}{3})\right)-1\right]+ \frac{1-e}{\pi n}\sin(\frac{\pi n}{3})-i\left[\frac{3}{9+\pi^2n^2}\left(e\left(\sin(\frac{\pi n}{3})-\right.\right.\right.\right.\medskip \\ 
+&-&\left.\left.\left.\left.\displaystyle\frac{\pi n}{3}\cos(\frac{\pi n}{3})\right)+\displaystyle\frac{\pi n}{3}\right)-\displaystyle\frac{1}{\pi}\left(\cos(\displaystyle\frac{\pi n}{3})- 1\right)+\displaystyle\frac{e-1}{\pi n}\left((-1)^n-\cos(\displaystyle\frac{\pi n}{3})\right)\right]\right)
+\end{array}
+$$
+\noindent
+Применив теорему Дирихле о поточечной сходимости ряда Фурье, видим, что построенный ряд Фурье сходится 
+к периодическому (с периодом $T=3$) продолжению исходной функции при всех $x\ne 3n$, и $S(3n)=(e-1)/2 \approx 0.86$ при 
+$n=0,\pm1,\pm2,\ldots$, где $S(x)$ --- сумма ряда Фурье. График функции $S(x)$ имеет вид
+\begin{center}
+	\begin{tikzpicture}
+	\begin{axis}[xmin=-6.2, xmax=6.2, ymin=-1, ymax=0.5,
+	width=0.8\textwidth,
+	height=0.4\textwidth,
+	axis x line=middle,
+	axis y line=middle, 
+	every axis x label/.style={at={(current axis.right of origin)},anchor=west},
+	every inner x axis line/.append style={|-latex'},
+	every inner y axis line/.append style={|-latex'},
+	minor tick num=1,			
+	axis equal=true,
+	xlabel=$x$, 
+	ylabel=$S(x)$,          
+	samples=100,
+	clip=true,
+	]
+	\addplot[color=black, line width=1.5pt,domain=-6:-5] {exp((\x+6))-1};
+	\addplot[color=black, line width=1.5pt,domain=-5:-3]{1.718};
+	\addplot[color=black, line width=1.5pt,domain=-3:-2] {exp((\x+3))-1};
+	\addplot[color=black, line width=1.5pt,domain=-2:0]{1.718};
+	\addplot[color=black, line width=1.5pt,domain=0:1] {exp((\x))-1};
+	\addplot[color=black, line width=1.5pt,domain=1:3]{1.718};
+	\addplot[color=black, line width=1.5pt,domain=3:4] {exp((\x-3))-1};
+	\addplot[color=black, line width=1.5pt,domain=4:6]{1.718};
+
+	\addplot[thick,dashed] coordinates {(-5,0) (-5,1.718)};
+	\addplot[thick,dashed] coordinates {(-2,0) (-2,1.718)};
+	\addplot[thick,dashed] coordinates {(1,0) (1,1.718)};
+	\addplot[thick,dashed] coordinates {(4,0) (4,1.718)};
+	\addplot[
+	mark=*,
+	mark options={fill=black, draw=black},
+	only marks,
+	] coordinates {(-6,  0.86) (-3,  0.86) (0,  0.86) (3,  0.86) (6,  0.86)};
+	\end{axis}
+	\end{tikzpicture}
+\end{center}
+
+\noindent
+\textbf{Ответ:}
+\[
+\begin{split}
+&f(x)=\sum_{n=-\infty}^\infty\left[\displaystyle\frac{1}{2}\left(\frac{3}{9+\pi^2n^2}\left[e\left(\cos(\frac{\pi n}{3}) +\frac{\pi n}{3}\sin(\frac{\pi n}{3})\right)-1\right]+ \frac{1-e}{\pi n}\sin(\frac{\pi n}{3})-i\left[\frac{3}{9+\pi^2n^2}\left(e\left(\sin(\frac{\pi n}{3})-\right.\right.\right.\right.\\[12pt]
+&\left.\left.\left.\left.\displaystyle
+-\frac{\pi n}{3}\cos(\frac{\pi n}{3})\right)+\displaystyle\frac{\pi n}{3}\right)-\displaystyle\frac{1}{\pi}\left(\cos(\displaystyle\frac{\pi n}{3})- 1\right)+\displaystyle\frac{e-1}{\pi n}\left((-1)^n-\cos(\displaystyle\frac{\pi n}{3})\right)\right]\right)\right] e^{\tfrac{i2\pi nx}{3}},~ x\ne 3n; \\ 
+&S(3n)=\frac{e-1}{2} \approx 0.86 ,\quad\text{при}~n\in\mathbb{Z}.
+\end{split}
+\]
+
+
+% ---------------------------- Problem 3----------------------------------
+\subsubsection*{\center Задача № 3.}
+{\bf Условие.~}\\
+Найти резольвенту для интегрального уравнения Вольтерры со следующим ядром 
+$$K(x,t)=\dfrac{t^2+2t+3}{x^2+2x+3}e^{t-x}.$$
+\noindent
+{\bf Решение.~}\\
+Из рекурентных соотношений получаем
+$$
+\begin{array}{rcl}
+K_1(x,t)&=&\displaystyle \dfrac{t^2+2t+3}{x^2+2x+3}e^{t-x}, \\[12pt]
+K_2(x,t)&=&\displaystyle\int\limits_t^x K(x,s)K_1(s,t)ds = \int\limits_t^x \dfrac{s^2+2s+3}{x^2+2x+3}e^{s-x}\cdot\dfrac{t^2+2t+3}{s^2+2s+3}e^{t-s} ds = \\ [12pt] 
+&=& \dfrac{t^2+2t+3}{x^2+2x+3}e^{t-x}\cdot(x-t),\\[12pt] \medskip
+K_3(x,t)&=&\displaystyle\int\limits_t^x K(x,s)K_2(s,t)ds = \int\limits_t^x \dfrac{s^2+2s+3}{x^2+2x+3}e^{s-x}\cdot\dfrac{t^2+2t+3}{s^2+2s+3}e^{t-s}(s-t) ds= \\ [12pt] \medskip
+&=& \dfrac{t^2+2t+3}{x^2+2x+3}e^{t-x}\cdot\dfrac{(x-t)^2}{2},\\[12pt] \medskip
+K_j(x,t)&=&\displaystyle\dfrac{t^2+2t+3}{x^2+2x+3}e^{t-x}\cdot\dfrac{(x-t)^{j-1}}{(j-1)!}, \quad j\in\mathbb{N}.
+\end{array}
+$$
+Подставляя это выражение для итерированных ядер, найдем резольвенту
+$$ 
+R(x,t,\lambda)=\dfrac{t^2+2t+3}{x^2+2x+3}e^{t-x}\sum_{j=1}^\infty \lambda^{j-1}\cdot\frac{(x-t)^{j-1}}{(j-1)!},
+\quad j=1,2,\ldots
+$$
